@@ -1,0 +1,77 @@
+\documentclass[a4paper]{article}
+
+
+\begin{document}
+    
+\begin{center}
+    {\LARGE Exercises\par}
+    {\Large Error Correction in Digital Systems\par}
+    {\large 31011 - Engineering Practices - Fall 2022\par}
+\end{center}
+
+\section{Majority Voting (Triple Modular Redundancy)}
+You receive the following bits $M=010011111100$.
+\begin{itemize}
+    \item What was the original message $X$?
+    \item How many errors occured in the received message?
+\end{itemize} 
+
+\section{Parity}
+What is the parity bit for the message $X=0101110100100110$ if even parity is used?
+
+\section{Hamming(7,4)}
+
+
+You want to send the message $X=1110$ using hamming code (7,4) in the usual format $M=d_3d_2d_1p_2d_0p_1p_0$.
+\begin{itemize}
+    \item What are the logic values of the parity bits $p_0$, $p_1$ and $p_2$?
+    \item What is the fully encoded message $M$?
+\end{itemize}
+
+
+\noindent You receive the encoded message $M=0011101$.
+\begin{itemize}
+    \item Did an error occur and if so on which position of the received message?
+    \item What was the original message $X$?
+\end{itemize}
+
+\noindent You receive the encoded message $M=0011110$.
+\begin{itemize}
+    \item Did an error occur and if so on which position of the received message?
+    \item What was the original message $X$?
+\end{itemize}
+
+
+\noindent You receive the encoded message $M=1000100$.
+\begin{itemize}
+    \item Did an error occur and if so on which position of the received message?
+    \item What was the original message $X$?
+\end{itemize}
+
+\section{Hamming(7,4) SEC-DED}
+
+You want to send the message $X=0101$ using hamming code (7,4) with an additional parity bit $p_3$ using the format $M=p_3d_3d_2d_1p_2d_0p_1p_0$.
+\begin{itemize}
+    \item What are the logic values of the three usual parity bits $p_0$, $p_1$ and $p_0$?
+    \item What is the value of the additional parity bit $p_3$?
+    \item What is the whole encoded message $M$?
+\end{itemize}
+
+\noindent You receive the encoded message $M=01100110$.
+\begin{itemize}
+    \item What is the overall parity of the message?
+    \item Is the even parity property still valid in all three groups of the hamming code?
+    \item Using the combined information, was there no, one or two errors in the received message?
+    \item Are you able to obtain the original message $X$?
+\end{itemize}
+
+\section{Does order matter?}
+You are sending a $n$-bit encoded message with error correction over a parallel $n$-bit noisy channel. 
+Does the order in which you arrange the data and ECC bits matter?
+
+You are now instead serializing the encoded message, sending one bit at a time over $n$ cycles. 
+Does the order in which the bits are sent matter?
+
+You are now storing the encoded data into a memory module. Does the order of the data and ECC bits matter now?
+
+\end{document}
