@@ -7,11 +7,18 @@
 \setcolor{orange}
 
 \usepackage{multicol}
-\usepackage{hyperref}
 \usepackage{siunitx}
 \usepackage{biblatex}
+\usepackage{xcolor}
+\usepackage{hyperref}
 
-\addbibresource{ref.bib}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@verbatim}
+  {\verbatim@font}
+  {\verbatim@font\footnotesize}
+  {}{}
+\makeatother
 
 \newcommand{\sectionseperator}[1]{%
 
@@ -38,9 +45,10 @@
 \begin{frame}{Outline}
 
     \begin{itemize}
-        \item Recap
-        \item Lab 1
-        \item Git
+        \item \textbf{Recap}: How can we reliably transmit/store data via/in a noisy medium?
+        \item \textbf{VHDL}: Getting friends with the compiler
+        \item \textbf{Lab 1}: First part of the project
+        \item \textbf{Git}: Proper project version control
     \end{itemize}
 
 \end{frame}
@@ -53,10 +61,11 @@
     \begin{itemize}
         \item Information is sent from $X$ to $Y$ via a \textit{noisy channel}
         \item The noisy channel randomly induces bit flips in the transmitted piece of information
-        \item Solution: Adding redundant information in an encoder and using it in a decoder to restore the message
+        \item Solution: Add redundant information in an encoder and use it in a decoder to restore the original message
+        \item In Hamming code: Capture information of overlapping groups and use per group information to locate error
     \end{itemize}
     \begin{figure}
-        \includegraphics[width=8cm]{../introduction_slides/fig/NoisyChannel.pdf}
+        \includegraphics[width=8cm]{../introduction_slides/fig/NoisyChannel_plus_ecc.pdf}
     \end{figure}
 \end{frame}
 
@@ -64,7 +73,7 @@
 
     \begin{itemize}
         \item Start with some exercises on Hamming code and literature review on soft errors
-        \item Implement part of an error correction capabable system in VHDL
+        \item Implement part of an error correction capable system in VHDL
         \item Write a technical report covering the theoretical background and your implementation using LaTeX
     \end{itemize}
 
@@ -74,19 +83,147 @@
 
 \end{frame}
 
+\sectionseperator{VHDL}
+
+\begin{frame}{What can VHDL do for you?}
+
+    \begin{itemize}
+        \item Describe relations between signals
+        \item Can be transformed by a synthesis tool to e.g. a gate or LUT circuit
+        \item Design can be split into smaller entities to reduce complexity
+        \item Relations between signals can be described at lower levels (e.g. boolean operators) or more abstract levels (e.g. if statements)
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}[fragile]{Entities}
+    \begin{columns}
+        \begin{column}{0.64\textwidth}
+\begin{verbatim}
+    entity MyEntity is 
+        port(
+            a: in  std_logic_vector(3 downto 0);
+            b: in  std_logic;
+            c: out std_logic_vector(1 downto 0);
+            d: out std_logic
+        );
+    end entity;
+\end{verbatim} 
+
+            \begin{itemize}
+                \item Defines the interface to the outside world
+                \item Everything inside the entity is a black box
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{figure}
+                \includegraphics[width=\columnwidth]{fig/entity.pdf}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Architectures}
+    \begin{columns}
+        \begin{column}{0.64\textwidth}
+\begin{verbatim}
+    architecture arch1 of MyEntity is 
+        signal e: std_logic_vector(3 downto 0);
+    begin
+        d <= not b;
+        e <= "0000" when b='1' else a;
+        c <= e(2 downto 1); 
+    end architecture;
+\end{verbatim} 
+
+            \begin{itemize}
+                \item Defines internal signals
+                \item Defines relationship between outputs, internal signals and inputs
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{figure}
+                \includegraphics[width=\columnwidth]{fig/architecture.pdf}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+
+\sectionseperator{Lab 1}
+
 \begin{frame}{Lab 1}
+    \begin{itemize}
+        \item Implement Hamming SEC-DED encoder and decoder
+        \item Send encoded message between two FPGAs and tamper with wires
+    \end{itemize}
     \begin{figure}
         \includegraphics[width=\textwidth]{fig/Hamming_FPGA_system_block.pdf}
     \end{figure}
 \end{frame}
 
+\begin{frame}{Lab 1}
+    \begin{itemize}
+        \item Project repository located at: \url{https://github.com/tjarker/error-correction-project}
+        \item \texttt{readme.md} contains guide
+        \item \texttt{projects/} contains Vivado projects for Sender and Receiver FPGA
+        \item \texttt{src/design/} contains VHDL designs
+        \item \texttt{src/test/} contains VHDL testbenches
+    \end{itemize}
+\end{frame}
+
+\sectionseperator{Git}
+
 \begin{frame}{Git}
 
     \begin{itemize}
-        \item 
+        \item How can multiple people collaborate on a shared code base with version control?
+        \item Version control: Track changes and allow to revert them
+        \item Projects are kept in repositories
+        \item Created by Linus Torvalds in 2005 for Linux kernel development
+        \item Widespread use especially in open-source projects
+        \item Different hosting providers like GitHub, GitLab or BitBucket
     \end{itemize}
 
 \end{frame}
+
+
+\begin{frame}{Working with Git}
+    \begin{itemize}
+        \item \texttt{clone} a repository to get a local version on your machine
+        \item Work on your local version until a feature is working
+        \item \texttt{stage} relevant changed files
+        \item \texttt{commit} staged files, creating a checkpoint which is the newest version of the repository
+        \item \texttt{push} the commit to update the remote repository with your version
+        \item \texttt{fetch} to check for new commits on the remote repository
+        \item \texttt{pull} to update the local repository with the remote version
+        \item \texttt{merge} remote updates with local changes
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Getting Started with Lab 1}
+    \begin{itemize}
+        \item Install Git using the guide at \url{https://github.com/git-guides/install-git}
+        \begin{itemize}
+            \item For a graphical user interface install GitHub Desktop
+            \item Else install a command line version
+        \end{itemize}
+        \item Clone \url{https://github.com/tjarker/error-correction-project}
+        \begin{itemize}
+            \item In Github Desktop: Add -> Clone Repository -> Enter URL
+            \item The command line: Navigate to target directory and type \texttt{git clone https://github.com/tjarker/error-correction-project}
+        \end{itemize}
+        \item To host your own repository and collaborate in your group, find out \textcolor{blue}{\href{https://docs.github.com/en/get-started/quickstart/fork-a-repo}{how to fork}}
+        \item Usually only source files are part of a Git repository 
+        \begin{itemize}
+            \item Take a look at the \texttt{.gitignore} file and see what is excluded from being tracked by Git
+        \end{itemize} 
+    \end{itemize}
+\end{frame}
+
+\sectionseperator{Ready To Start}
+
 
 
 
